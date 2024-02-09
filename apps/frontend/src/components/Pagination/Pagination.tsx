@@ -9,7 +9,7 @@ const Pagination = ({
   handleChangeLimit,
 }: PaginationTypes) => {
   return (
-    <div>
+    <div className="border-t-2 xl:size-1/5 size-60">
       <div className="flex mt-4 justify-around items-center">
         <button
           className="bg-buttons-primary hover:bg-buttons-primary-hover disabled:bg-buttons-primary-disable text-white font-bold py-2 px-4 rounded"
@@ -27,7 +27,7 @@ const Pagination = ({
           Next
         </button>
       </div>
-      <div className="mt-4">
+      <div className="mt-4 flex justify-center">
         <label>Items per page:</label>
         <select
           value={limit}

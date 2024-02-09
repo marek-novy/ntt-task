@@ -2,8 +2,8 @@ import { DogBreedsTypes } from "./DogBreeds.types";
 
 const DogBreedsTable = ({ dogBreeds }: DogBreedsTypes) => {
   return (
-    <table>
-      <thead>
+    <table className="xl:size-1/5 size-60">
+      <thead className="border-b-2">
         <tr>
           <th>Dog breeds</th>
         </tr>

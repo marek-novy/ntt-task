@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { DogBreedsController } from './app.controller';
+import { DogBreedsService } from './app.service';
 
 @Module({
   imports: [
@@ -10,7 +10,7 @@ import { AppService } from './app.service';
       rootPath: join(__dirname, '../..', 'frontend', 'dist'),
     }),
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [DogBreedsController],
+  providers: [DogBreedsService],
 })
 export class AppModule {}

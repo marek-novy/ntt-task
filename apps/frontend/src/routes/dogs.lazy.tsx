@@ -6,7 +6,6 @@ import DogBreedsTable from "../components/DogBreedsTable/DogBreedsTable.tsx";
 import Loader from "../components/Loader/Loader.tsx";
 import Error from "../components/Error/Error.tsx";
 import Pagination from "../components/Pagination/Pagination.tsx";
-// import { useEffect } from 'react';
 
 const Dogs = observer(() => {
   const {

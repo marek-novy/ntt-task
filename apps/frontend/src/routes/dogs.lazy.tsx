@@ -34,6 +34,7 @@ const Dogs = observer(() => {
   };
 
   const handleChangeLimit = (newLimit: number) => {
+    dogBreedsStore.setPage(1);
     dogBreedsStore.setLimit(newLimit);
   };
 

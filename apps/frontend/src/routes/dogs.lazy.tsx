@@ -3,6 +3,9 @@ import { useQuery } from "@tanstack/react-query";
 import { observer } from "mobx-react";
 import dogBreedsStore from "../store/DogBreedsStore.ts";
 import DogBreedsTable from "../components/DogBreedsTable/DogBreedsTable.tsx";
+import Loader from "../components/Loader/Loader.tsx";
+import Error from "../components/Error/Error.tsx";
+import Pagination from "../components/Pagination/Pagination.tsx";
 // import { useEffect } from 'react';
 
 const Dogs = observer(() => {
@@ -18,6 +21,14 @@ const Dogs = observer(() => {
       ).then((res) => res.json()),
   });
 
+  if (isPending) {
+    return <Loader />;
+  }
+
+  if (error) {
+    return <Error errorMessage={error.message} />;
+  }
+
   const handleChangePage = (newPage: number) => {
     dogBreedsStore.setPage(newPage);
   };
@@ -26,45 +37,17 @@ const Dogs = observer(() => {
     dogBreedsStore.setLimit(newLimit);
   };
 
-  if (isPending) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error fetching dog breeds: {error.message}</div>;
-  }
-
   return (
     <div className="p-2 flex justify-center flex-col items-center">
       <DogBreedsTable dogBreeds={dogBreeds} />
-      <div className="flex mt-4 justify-around items-center">
-        <button
-          className="bg-blue-500 hover:bg-blue-700 disabled:bg-gray-500 text-white font-bold py-2 px-4 rounded"
-          onClick={() => handleChangePage(dogBreedsStore.page - 1)}
-          disabled={dogBreedsStore.page === 1}
-        >
-          Prev
-        </button>
-        <span className="mx-2">{dogBreedsStore.page}</span>
-        <button
-          className="bg-blue-500 hover:bg-blue-700 disabled:bg-gray-500 text-white font-bold py-2 px-4 rounded"
-          onClick={() => handleChangePage(dogBreedsStore.page + 1)}
-          disabled={dogBreeds.length < dogBreedsStore.limit}
-        >
-          Next
-        </button>
-      </div>
-      <div className="mt-4">
-        <label>Items per page:</label>
-        <select
-          value={dogBreedsStore.limit}
-          onChange={(e) => handleChangeLimit(Number(e.target.value))}
-        >
-          <option value={10}>10</option>
-          <option value={15}>15</option>
-          <option value={20}>20</option>
-        </select>
-      </div>
+      <Pagination
+        page={dogBreedsStore.page}
+        limit={dogBreedsStore.limit}
+        isPrevDisabled={dogBreedsStore.page === 1}
+        isNextDisabled={dogBreeds.length < dogBreedsStore.limit}
+        handleChangePage={handleChangePage}
+        handleChangeLimit={handleChangeLimit}
+      />
     </div>
   );
 });

@@ -6,6 +6,7 @@ import DogBreedsTable from "../components/DogBreedsTable/DogBreedsTable.tsx";
 import Loader from "../components/Loader/Loader.tsx";
 import Error from "../components/Error/Error.tsx";
 import Pagination from "../components/Pagination/Pagination.tsx";
+import { useEffect } from "react";
 
 const Dogs = observer(() => {
   const {
@@ -20,6 +21,14 @@ const Dogs = observer(() => {
       ).then((res) => res.json()),
   });
   const navigate = useNavigate();
+  const route: { page?: number; limit?: number } = Route.useSearch();
+
+  useEffect(() => {
+    if (route.page && route.limit) {
+      dogBreedsStore.setPage(route.page);
+      dogBreedsStore.setLimit(route.limit);
+    }
+  }, [route]);
 
   if (isPending) {
     return <Loader />;

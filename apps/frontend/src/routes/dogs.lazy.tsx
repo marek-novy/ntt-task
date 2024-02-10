@@ -1,4 +1,4 @@
-import { createLazyFileRoute } from "@tanstack/react-router";
+import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { observer } from "mobx-react";
 import dogBreedsStore from "../store/DogBreedsStore.ts";
@@ -19,6 +19,7 @@ const Dogs = observer(() => {
         `/api/dog-breeds?page=${dogBreedsStore.page}&limit=${dogBreedsStore.limit}`,
       ).then((res) => res.json()),
   });
+  const navigate = useNavigate();
 
   if (isPending) {
     return <Loader />;
@@ -30,11 +31,19 @@ const Dogs = observer(() => {
 
   const handleChangePage = (newPage: number) => {
     dogBreedsStore.setPage(newPage);
+    navigate({
+      to: "/dogs",
+      search: { page: dogBreedsStore.page, limit: dogBreedsStore.limit },
+    });
   };
 
   const handleChangeLimit = (newLimit: number) => {
     dogBreedsStore.setPage(1);
     dogBreedsStore.setLimit(newLimit);
+    navigate({
+      to: "/dogs",
+      search: { page: dogBreedsStore.page, limit: dogBreedsStore.limit },
+    });
   };
 
   return (

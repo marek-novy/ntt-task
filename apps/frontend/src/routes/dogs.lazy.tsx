@@ -7,6 +7,7 @@ import Loader from "../components/Loader/Loader.tsx";
 import Error from "../components/Error/Error.tsx";
 import Pagination from "../components/Pagination/Pagination.tsx";
 import { useEffect } from "react";
+import { DogsRouteType } from "../types.ts";
 
 const Dogs = observer(() => {
   const {
@@ -21,11 +22,13 @@ const Dogs = observer(() => {
       ).then((res) => res.json()),
   });
   const navigate = useNavigate();
-  const route: { page?: number; limit?: number } = Route.useSearch();
+  const route: DogsRouteType = Route.useSearch();
 
   useEffect(() => {
-    if (route.page && route.limit) {
+    if (route.page) {
       dogBreedsStore.setPage(route.page);
+    }
+    if (route.limit) {
       dogBreedsStore.setLimit(route.limit);
     }
   }, [route]);

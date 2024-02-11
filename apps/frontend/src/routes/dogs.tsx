@@ -20,7 +20,7 @@ function Dogs() {
     if (!cachedDogData[page]) {
       const data = await fetchDogs(page);
       if (!data) {
-        // TODO do something?
+        // TODO retry and/or notification about failure of getting Nth page of dogs...
         return;
       }
       setPage(data.page);

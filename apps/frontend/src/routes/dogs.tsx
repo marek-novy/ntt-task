@@ -17,16 +17,13 @@ function Dogs() {
   const fetchDogs = useFetchDogs();
 
   const fetch = useCallback(async () => {
-    const data = await fetchDogs(page);
-    if (!data) {
-      // TODO do something?
-      return;
-    }
-    setPage(data.page);
-    if (totalPages !== data.totalPages) {
-      setTotalPages(data.totalPages);
-    }
-    if (!cachedDogData[data.page]) {
+    if (!cachedDogData[page]) {
+      const data = await fetchDogs(page);
+      if (!data) {
+        // TODO do something?
+        return;
+      }
+      setPage(data.page);
       setCachedDogData(prev => {
         const newData = {
           ...prev
@@ -34,6 +31,9 @@ function Dogs() {
         newData[data.page] = data.dogs;
         return newData;
       });
+      if (totalPages !== data.totalPages) {
+        setTotalPages(data.totalPages);
+      }
     }
   }, [fetchDogs, page, totalPages, cachedDogData]);
 
@@ -42,20 +42,12 @@ function Dogs() {
   };
 
   useEffect(() => {
-    console.log(`### initial called`);
-    fetch();
-  }, []);
-
-  useEffect(() => {
     console.log(`### other called`);
     fetch();
   }, [page, fetch]);
 
   return (
     <div className="p-2">
-      <h3>Welcome Dogs!</h3>
-      Page number now is {page}
-
       <div className="container mx-auto mt-8">
         <DogsTable dogs={cachedDogData[page]}/>
         <Pagination

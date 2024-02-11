@@ -9,7 +9,6 @@ import { Route } from "../../routes/dogs";
 export const Dogs = observer(() => {
     const fetchDogs = useFetchDogs();
     const { page } = Route.useSearch();
-    const { cachedDogData, totalPages } = dogsState;
   
     const fetch = useCallback(async () => {
       if (!isDataForPageAvailable.get()(page)) {
@@ -21,7 +20,7 @@ export const Dogs = observer(() => {
         addDataForPage(dogsState, data.page, data.dogs);
         setTotalPages(dogsState, data.totalPages);
       }
-    }, [fetchDogs, page, totalPages, cachedDogData]);
+    }, [fetchDogs, page]);
   
     useEffect(() => {
       fetch();

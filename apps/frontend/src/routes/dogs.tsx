@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { CachedDogsData, PaginableDogsDto } from "../model/types";
+import { CachedDogsData } from "../model/types";
 import { DogsTable } from "../dogs/components/DogsTable";
 import { Pagination } from "../dogs/components/Pagination";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useFetchDogs } from "../dogs/hooks/useFetchDogs";
 
 export const Route = createFileRoute("/dogs")({
@@ -16,49 +16,51 @@ function Dogs() {
 
   const fetchDogs = useFetchDogs();
 
-  const [data, setData] = useState<PaginableDogsDto>(
-    {
-      dogs: [
-        {
-          breedName: 'a',
-          synonyms: ['b']
-        },
-        {
-          breedName: 'c',
-          synonyms: ['d', 'e']
-        },
-        {
-          breedName: 'f'
-        }
-      ],
-      page: 1,
-      totalPages: 47
+  const fetch = useCallback(async () => {
+    const data = await fetchDogs(page);
+    if (!data) {
+      // TODO do something?
+      return;
     }
-  );
+    setPage(data.page);
+    if (totalPages !== data.totalPages) {
+      setTotalPages(data.totalPages);
+    }
+    if (!cachedDogData[data.page]) {
+      setCachedDogData(prev => {
+        const newData = {
+          ...prev
+        };
+        newData[data.page] = data.dogs;
+        return newData;
+      });
+    }
+  }, [fetchDogs, page, totalPages, cachedDogData]);
 
-  const updatePage = (page: number) => {
-    setData(prev => (
-      {
-        ...prev,
-        page
-      }
-    ))
-  }
+  const updatePage = (newPage: number) => {
+    setPage(newPage);
+  };
 
   useEffect(() => {
-    fetchDogs(1);
+    console.log(`### initial called`);
+    fetch();
   }, []);
+
+  useEffect(() => {
+    console.log(`### other called`);
+    fetch();
+  }, [page, fetch]);
 
   return (
     <div className="p-2">
       <h3>Welcome Dogs!</h3>
-      Page number now is {data.page}
+      Page number now is {page}
 
       <div className="container mx-auto mt-8">
-        <DogsTable dogs={data.dogs}/>
+        <DogsTable dogs={cachedDogData[page]}/>
         <Pagination
-          currentPage={data.page}
-          totalPages={data.totalPages}
+          currentPage={page}
+          totalPages={totalPages}
           goToPage={updatePage}
         />
       </div>

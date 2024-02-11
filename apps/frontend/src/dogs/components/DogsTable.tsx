@@ -2,11 +2,14 @@ import { PropsWithChildren } from "react";
 import { DogDto } from "../../model/types";
 
 interface DogsTableProps {
-    dogs: DogDto[]
+    dogs: DogDto[] | undefined
 }
 
 export function DogsTable(props: PropsWithChildren<DogsTableProps>) {
     const { dogs } = props;
+    if (!dogs) {
+        return <h3>No dog data available</h3>;
+    }
     return (
       <table className="min-w-full bg-white border border-gray-400">
         <thead className="bg-gray-200">

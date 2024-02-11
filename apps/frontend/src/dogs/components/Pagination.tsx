@@ -5,12 +5,12 @@ import { getVisibleNumbers } from "../utils/visiblePagesGenerator";
 import { observer } from "mobx-react";
 
 export const Pagination = observer(() => {
-    const search = Route.useSearch();
+    const { page } = Route.useSearch();
     const { totalPages } = dogsState;
     return (
       <div className="flex justify-center items-center mt-4">
           <div className="flex space-x-2">
-            {search.page !== 1 && (
+            {page !== 1 && (
                 <Link to="/dogs" search={{page: 1}}>
                     <button
                         className="bg-blue-500 text-white px-3 py-1 rounded focus:outline-none focus:shadow-outline"
@@ -19,8 +19,8 @@ export const Pagination = observer(() => {
                     </button>
                 </Link>
             )}
-            {getVisibleNumbers(search.page, totalPages).map((number, index) => {
-                const isCurrent = number === search.page;
+            {getVisibleNumbers(page, totalPages).map((number, index) => {
+                const isCurrent = number === page;
                 return (
                     <Link to="/dogs" search={{page: number}} key={index}>
                         <button
@@ -31,7 +31,7 @@ export const Pagination = observer(() => {
                     </Link>
                 );
             })}
-            {search.page !== totalPages && (
+            {page !== totalPages && (
                 <Link to="/dogs" search={{page: totalPages}}>
                     <button
                         className="bg-blue-500 text-white px-3 py-1 rounded focus:outline-none focus:shadow-outline"

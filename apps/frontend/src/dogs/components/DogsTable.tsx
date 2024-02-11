@@ -5,9 +5,9 @@ import { Route } from "../../routes/dogs";
 
 
 export const DogsTable = observer(() => {
-  const search = Route.useSearch();
+  const { page } = Route.useSearch();
   const { cachedDogData } = dogsState;
-  const dogs = cachedDogData[search.page];
+  const dogs = cachedDogData[page];
   if (!dogs) {
       return <h3>No dog data available</h3>;
   }

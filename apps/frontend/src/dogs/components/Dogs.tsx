@@ -8,12 +8,12 @@ import { Route } from "../../routes/dogs";
 
 export const Dogs = observer(() => {
     const fetchDogs = useFetchDogs();
-    const search = Route.useSearch();
+    const { page } = Route.useSearch();
     const { cachedDogData, totalPages } = dogsState;
   
     const fetch = useCallback(async () => {
-      if (!isDataForPageAvailable.get()(search.page)) {
-        const data = await fetchDogs(search.page);
+      if (!isDataForPageAvailable.get()(page)) {
+        const data = await fetchDogs(page);
         if (!data) {
           // TODO retry and/or notification about failure of getting Nth page of dogs...
           return;
@@ -21,11 +21,11 @@ export const Dogs = observer(() => {
         addDataForPage(dogsState, data.page, data.dogs);
         setTotalPages(dogsState, data.totalPages);
       }
-    }, [fetchDogs, search.page, totalPages, cachedDogData]);
+    }, [fetchDogs, page, totalPages, cachedDogData]);
   
     useEffect(() => {
       fetch();
-    }, [search.page, fetch]);
+    }, [page, fetch]);
   
     return (
       <div className="p-2">

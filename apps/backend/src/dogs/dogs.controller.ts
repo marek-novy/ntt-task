@@ -21,7 +21,9 @@ export class DogsController {
       return this.dogsService.getNthPageOfDogs(page);
     } catch (err) {
       if (err instanceof InvalidPageRequestedError) {
-        throw new BadRequestException();
+        throw new BadRequestException(
+          `Request page (${page}) is out of bounds...`,
+        );
       }
     }
   }

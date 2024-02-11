@@ -7,7 +7,7 @@ import {
   mapDogsEntitiesToDtos,
   mapRawDogsToEntities,
 } from './dogs.mapper-service';
-import { InvalidPageRequestedError } from './errors/InvalidPageRequestedError';
+import { InvalidPageRequestedException } from './exceptions/InvalidPageRequestedException';
 
 @Injectable()
 export class DogsService {
@@ -21,7 +21,7 @@ export class DogsService {
 
   getNthPageOfDogs(page: number): PaginableDogsDto {
     if (page <= 0 || page > this.totalPages) {
-      throw new InvalidPageRequestedError();
+      throw new InvalidPageRequestedException(page);
     }
     const slicingNumber = (page - 1) * 10;
 

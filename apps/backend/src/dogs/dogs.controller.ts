@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Controller,
   DefaultValuePipe,
   Get,
@@ -8,7 +7,6 @@ import {
 } from '@nestjs/common';
 import { DogsService } from './dogs.service';
 import { PaginableDogsDto } from './dtos/paginable-dogs.dto';
-import { InvalidPageRequestedError } from './errors/InvalidPageRequestedError';
 
 @Controller('dogs')
 export class DogsController {
@@ -18,14 +16,6 @@ export class DogsController {
   getDogsPaginated(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
   ): PaginableDogsDto {
-    try {
-      return this.dogsService.getNthPageOfDogs(page);
-    } catch (err) {
-      if (err instanceof InvalidPageRequestedError) {
-        throw new BadRequestException(
-          `Request page (${page}) is out of bounds...`,
-        );
-      }
-    }
+    return this.dogsService.getNthPageOfDogs(page);
   }
 }

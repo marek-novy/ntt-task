@@ -1,12 +1,15 @@
-import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
+import { Controller, Get, Query } from '@nestjs/common';
+import { DogBreedsService } from './app.service';
 
-@Controller()
-export class AppController {
-  constructor(private readonly appService: AppService) {}
+@Controller('dog-breeds')
+export class DogBreedsController {
+  constructor(private readonly dogBreedService: DogBreedsService) {}
 
   @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  getDogBreeds(
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+  ): string[] {
+    return this.dogBreedService.getDogBreeds(page, limit);
   }
 }

@@ -29,8 +29,9 @@ export const Dogs = observer(() => {
     return (
       <div className="p-2">
         <div className="container mx-auto mt-8">
-          <DogsTable />
           <Pagination />
+          <br />
+          <DogsTable />
         </div>
       </div>
     );
